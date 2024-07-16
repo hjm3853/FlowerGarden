@@ -1,0 +1,5 @@
+﻿Library
+.vsconfig
+Assembly-CSharp.csproj
+*.csproj
+Dice.sln
