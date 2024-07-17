@@ -73,7 +73,7 @@ namespace EasyExcel
 			
 				if (stoList != null && stoList.Count > 0)
 				{
-					EEConverter.GenerateScriptableObjects( OdinEasyExcelMenuTree.kTotalMenu.GetSetting().SaveClientAssetPath, DBType.Client);
+					EEConverter.GenerateScriptableObjects(OdinEasyExcelMenuTree.kTotalMenu.GetSetting().SaveClientAssetPath, DBType.Client);
 				}
 			}		
 

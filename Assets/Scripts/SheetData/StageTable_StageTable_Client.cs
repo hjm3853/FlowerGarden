@@ -15,7 +15,7 @@ using EasyExcel;
 namespace SheetData
 {
 	[Serializable]
-	public class GameDataTable_Server : EERowData
+	public class StageTable_Client : EERowData
 	{
 		[EEKeyField]
 		[SerializeField]
@@ -23,34 +23,29 @@ namespace SheetData
 		public long UID { get { return _UID; } set{_UID=value; } }
 
 		[SerializeField]
-		private string _GameDataID;
-		public string GameDataID { get { return _GameDataID; } set{_GameDataID=value; } }
+		private string _Name;
+		public string Name { get { return _Name; } set{_Name=value; } }
 
 		[SerializeField]
-		private long _GameDataValue;
-		public long GameDataValue { get { return _GameDataValue; } set{_GameDataValue=value; } }
+		private string _Reward;
+		public string Reward { get { return _Reward; } set{_Reward=value; } }
 
 		[SerializeField]
-		private int _GameDataCount;
-		public int GameDataCount { get { return _GameDataCount; } set{_GameDataCount=value; } }
-
-		[SerializeField]
-		private float _GameDataRatio;
-		public float GameDataRatio { get { return _GameDataRatio; } set{_GameDataRatio=value; } }
+		private string _Description;
+		public string Description { get { return _Description; } set{_Description=value; } }
 
 
-		public GameDataTable_Server()
+		public StageTable_Client()
 		{
 		}
 
 #if UNITY_EDITOR
-		public GameDataTable_Server(List<List<string>> sheet, int row, int column)
+		public StageTable_Client(List<List<string>> sheet, int row, int column)
 		{
 			TryParse(sheet[row][column++], out _UID);
-			TryParse(sheet[row][column++], out _GameDataID);
-			TryParse(sheet[row][column++], out _GameDataValue);
-			TryParse(sheet[row][column++], out _GameDataCount);
-			TryParse(sheet[row][column++], out _GameDataRatio);
+			TryParse(sheet[row][column++], out _Name);
+			TryParse(sheet[row][column++], out _Reward);
+			TryParse(sheet[row][column++], out _Description);
 		}
 #endif
 		public override void OnAfterSerialized()
@@ -58,14 +53,14 @@ namespace SheetData
 		}
 	}
 
-	public class GameDataTable_GameDataTable_Server : EERowDataCollection
+	public class StageTable_StageTable_Client : EERowDataCollection
 	{
 		
-		public List<GameDataTable_Server> elements = new List<GameDataTable_Server>();
+		public List<StageTable_Client> elements = new List<StageTable_Client>();
 
 		public override void AddData(EERowData data)
 		{
-			elements.Add(data as GameDataTable_Server);
+			elements.Add(data as StageTable_Client);
 		}
 
 		public override int GetDataCount()
@@ -73,7 +68,11 @@ namespace SheetData
 			return elements.Count;
 		}
 
-		public override EERowData GetData(int index)
+	
+public List<StageTable_Client> OnGetAllData()
+		{		
+return elements;
+		}		public override EERowData GetData(int index)
 		{
 			return elements[index];
 		}

@@ -6,44 +6,64 @@ using UnityEngine;
 
 public class TableManager : MonoBehaviour
 {
-    static public TableManager instance = null;
+    static TableManager mInstance = null;
 
     private EEDataManager _ee = new EEDataManager();
 
     //////////////////////////////////////////////////////////////////////////////////
     ///원본형
 
-    private List<GameDataTable_Client> mGameDataTableList;
-    public List<GameDataTable_Client> gameDataTableList { get { return mGameDataTableList; } }
+    private List<StageTable_Client> mStageTableList;
+    public List<StageTable_Client> stageTableList { get { return mStageTableList; } }
+
+    private List<StageGroupTable_Client> mStageGroupTableList;
+    public List<StageGroupTable_Client> stageGroupTableList { get { return mStageGroupTableList; } }
+
+    static public TableManager instance
+    {
+        get
+        {
+            if (mInstance == null)
+            {
+                mInstance = FindObjectOfType<TableManager>(true);
+                mInstance.Init();
+            }
+
+            return mInstance;
+        }        
+    }
 
     private void Awake()
     {
-        instance = this;
-
-        //////////////////////////////////////////////////////////////////////////////////
-        //플레이어 액터 관련 테이블
-        //layerTableList = _ee.GetListJson<PlayerTable_Client>();
-        mGameDataTableList = _ee.GetListJson<GameDataTable_Client>();
+        //Init();
     }
-/*
+
     public void Init()
     {
         //////////////////////////////////////////////////////////////////////////////////
         //플레이어 액터 관련 테이블
         //layerTableList = _ee.GetListJson<PlayerTable_Client>();
-        mGameDataTableList = _ee.GetListJson<GameDataTable_Client>();
-
-    }*/
-/*
-    /// <summary>캐릭터정보 UID로 가져오기</summary>
-    public PlayerTable_Client FindPlayerInfo(long _uid)
+        mStageTableList = _ee.GetListJson<StageTable_Client>();
+        mStageGroupTableList = _ee.GetListJson<StageGroupTable_Client>();
+    }
+    
+    public StageTable_Client FindStageTable(long _uid)
     {
-        PlayerTable_Client data = mPlayerTableList.Find(d => d.UID == _uid);
+        StageTable_Client data = mStageTableList.Find(d => d.UID == _uid);
         if (data != default) return data;
 #if LOG
 		Log.Error($"UID [{_uid}] 와 맞는 데이터가 없습니다", Log.Account.Default, 1);
 #endif
         return default;
     }
-*/
+
+    public StageGroupTable_Client FindStageGroupTable(long _uid)
+    {
+        StageGroupTable_Client data = mStageGroupTableList.Find(d => d.UID == _uid);
+        if (data != default) return data;
+#if LOG
+		Log.Error($"UID [{_uid}] 와 맞는 데이터가 없습니다", Log.Account.Default, 1);
+#endif
+        return default;
+    }
 }

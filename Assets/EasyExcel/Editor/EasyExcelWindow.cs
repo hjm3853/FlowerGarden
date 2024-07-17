@@ -373,7 +373,7 @@ namespace EasyExcel
 		{
 			var path = EditorUtility.OpenFolderPanel("클라이언트CS를 저장할 폴더를 선택하세요", SaveClientCsPath, "");
 			if (string.IsNullOrEmpty(path)) return;
-			SaveClientCsPath = path + "/";
+			SaveClientCsPath = Application.persistentDataPath + path + "/";
 			SaveSetting();
 		}
 
