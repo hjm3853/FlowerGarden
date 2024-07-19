@@ -1,0 +1,52 @@
+[
+  {
+    "UID": 300000000001,
+    "Name": "민지",
+    "Hp": 30,
+    "Dice": 1,
+    "Skill1": 0,
+    "Skill2": 0,
+    "Skill3": 0,
+    "Prefab": "Character/Player1"
+  },
+  {
+    "UID": 300000000002,
+    "Name": "허니",
+    "Hp": 40,
+    "Dice": 2,
+    "Skill1": 0,
+    "Skill2": 0,
+    "Skill3": 0,
+    "Prefab": "Character/Player2"
+  },
+  {
+    "UID": 300000000003,
+    "Name": "다니엘",
+    "Hp": 50,
+    "Dice": 3,
+    "Skill1": 0,
+    "Skill2": 0,
+    "Skill3": 0,
+    "Prefab": "Character/Player3"
+  },
+  {
+    "UID": 300000000004,
+    "Name": "해린",
+    "Hp": 60,
+    "Dice": 4,
+    "Skill1": 0,
+    "Skill2": 0,
+    "Skill3": 0,
+    "Prefab": "Character/Player1"
+  },
+  {
+    "UID": 300000000005,
+    "Name": "혜인",
+    "Hp": 70,
+    "Dice": 5,
+    "Skill1": 0,
+    "Skill2": 0,
+    "Skill3": 0,
+    "Prefab": "Character/Player2"
+  }
+]
