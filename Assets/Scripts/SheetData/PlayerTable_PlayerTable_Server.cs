@@ -27,6 +27,10 @@ namespace SheetData
 		public string Name { get { return _Name; } set{_Name=value; } }
 
 		[SerializeField]
+		private int _Type;
+		public int Type { get { return _Type; } set{_Type=value; } }
+
+		[SerializeField]
 		private long _Hp;
 		public long Hp { get { return _Hp; } set{_Hp=value; } }
 
@@ -60,6 +64,7 @@ namespace SheetData
 		{
 			TryParse(sheet[row][column++], out _UID);
 			TryParse(sheet[row][column++], out _Name);
+			TryParse(sheet[row][column++], out _Type);
 			TryParse(sheet[row][column++], out _Hp);
 			TryParse(sheet[row][column++], out _Dice);
 			TryParse(sheet[row][column++], out _Skill1);

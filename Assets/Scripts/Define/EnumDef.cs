@@ -9,4 +9,12 @@ namespace EnumDef
         Both
     }
 
+    public enum PlayerType
+    {
+        None,
+        Purple,
+        Red,
+        Green,
+    }
+
 }

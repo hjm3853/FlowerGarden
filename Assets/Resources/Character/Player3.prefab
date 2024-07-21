@@ -10,7 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2440315213949841574}
   - component: {fileID: 1910886849680472517}
-  m_Layer: 0
+  - component: {fileID: 7508105900677598884}
+  m_Layer: 3
   m_Name: Player3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -47,6 +48,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   kDiceTransform: {fileID: 2560630416031635873}
+--- !u!65 &7508105900677598884
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 646304218353245252}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2, y: 4, z: 0.2}
+  m_Center: {x: 0, y: 2, z: 0}
 --- !u!1 &3627086212018794371
 GameObject:
   m_ObjectHideFlags: 0
@@ -57,7 +79,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1830540987384894430}
   - component: {fileID: 5686716347046546634}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -140,7 +162,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2560630416031635873}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Dice
   m_TagString: Untagged
   m_Icon: {fileID: 0}

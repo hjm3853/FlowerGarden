@@ -18,6 +18,8 @@ public class Monster : MonoBehaviour
     public Transform kInfoTransform;
     public Transform GetInfoTransform() { return kInfoTransform; }
 
+    public int slotIndex { get; set; }
+
     // Start is called before the first frame update
     void Start()
     {

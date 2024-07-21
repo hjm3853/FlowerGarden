@@ -13,9 +13,11 @@ public class PlayManager : MonoBehaviour
     public long TestPlayerUID2 = 300000000003;
 
     public long TestMonsterUID0 = 400000000001;
-    public long TestMonsterUID1 = 400000000003;
-    public long TestMonsterUID2 = 400000000002;
+    public long TestMonsterUID1 = 400000000002;
+    public long TestMonsterUID2 = 400000000003;
 
+    public Player[] playerList = new Player[3];
+    public Monster[] monsterList = new Monster[3];
 
     private void Awake()
     {
@@ -71,35 +73,35 @@ public class PlayManager : MonoBehaviour
 
     public void MonsterSetting(long _uid0, long _uid1, long _uid2)
     {
-        Monster mon0 = null;
-        Monster mon2 = null;
-        Monster mon3 = null;
+        for(int i = 0; i < monsterList.Length; i++)
+            monsterList[i] = null;
+        
 
         if (_uid0 != 0)
         {
             var table = Mng.table.FindMonsterTableList(_uid0);
             GameObject go = Resources.Load(table.Prefab) as GameObject;
-            mon0 = Instantiate(go).GetComponent<Monster>();
-            mon0.table = table;
+            monsterList[0] = Instantiate(go).GetComponent<Monster>();
+            monsterList[0].table = table;
         }
 
         if (_uid1 != 0)
         {
             var table = Mng.table.FindMonsterTableList(_uid1);
             GameObject go = Resources.Load(table.Prefab) as GameObject;
-            mon2 = Instantiate(go).GetComponent<Monster>();
-            mon2.table = table;
+            monsterList[1] = Instantiate(go).GetComponent<Monster>();
+            monsterList[1].table = table;
         }
 
         if (_uid2 != 0)
         {
             var table = Mng.table.FindMonsterTableList(_uid2);
             GameObject go = Resources.Load(table.Prefab) as GameObject;
-            mon3 = Instantiate(go).GetComponent<Monster>();
-            mon3.table = table;
+            monsterList[2] = Instantiate(go).GetComponent<Monster>();
+            monsterList[2].table = table;
         }
 
-        kStage.SetMonster(mon0, mon2, mon3);
-        Mng.canvas.stageInfo.SetMonster(mon0, mon2, mon3);
+        kStage.SetMonster(monsterList);
+        Mng.canvas.stageInfo.SetMonster(monsterList[0], monsterList[1], monsterList[2]);
     }    
 }

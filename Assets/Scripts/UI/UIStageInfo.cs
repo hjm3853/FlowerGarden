@@ -1,54 +1,44 @@
+using EnumDef;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIStageInfo : MonoBehaviour
 {
-    public RectTransform kPurpleDiceSlot;
-    public TMP_Text kPurpleDiceCnt;
-
-    public RectTransform kRedDiceSlot;
-    public TMP_Text kRedDiceCnt;
-
-    public RectTransform kGreenDiceSlot;
-    public TMP_Text kGreenDiceCnt;
-
+    [Header("플레이어 총 체력")]
     public TMP_Text kPlayerTotalHp;
 
-    
-    public RectTransform kMonsterInfoSlot0;
-    public RectTransform kMonsterInfoSlot1;
-    public RectTransform kMonsterInfoSlot2;
+    [Header("보라 플레이어 정보")]
+    public UIPlayerSlotInfo kPurplePlayerSlotInfo;
+    [Header("빨강 플레이어 정보")]
+    public UIPlayerSlotInfo kRedPlayerSlotInfo;
+    [Header("초록 플레이어 정보")]
+    public UIPlayerSlotInfo kGreenPlayerSlotInfo;
 
-    public TMP_Text kMonsterName0;
-    public TMP_Text kMonsterName1;
-    public TMP_Text kMonsterName2;
+    [Header("1번 슬롯 몬스터 정보")]
+    public UIMonsterSlotInfo kMonsterSlotInfo0;
+    [Header("2번 슬롯 몬스터 정보")]
+    public UIMonsterSlotInfo kMonsterSlotInfo1;
+    [Header("3번 슬롯 몬스터 정보")]
+    public UIMonsterSlotInfo kMonsterSlotInfo2;    
 
-    public TMP_Text kMonsterHp0;
-    public TMP_Text kMonsterHp1;
-    public TMP_Text kMonsterHp2;
+    [Header("전투 실행 버튼")]
+    public Button kBattleButton;
 
-    public TMP_Text kMonsterDicePivot0;
-    public TMP_Text kMonsterDicePivot1;
-    public TMP_Text kMonsterDicePivot2;
-
-    public Transform[] kMonsterRedDiceArr0;
-    public Transform[] kMonsterGreenDiceArr0;
-    public Transform[] kMonsterPurpleDiceArr0;
-
-    public Transform[] kMonsterRedDiceArr1;
-    public Transform[] kMonsterGreenDiceArr1;
-    public Transform[] kMonsterPurpleDiceArr1;
-
-    public Transform[] kMonsterRedDiceArr2;
-    public Transform[] kMonsterGreenDiceArr2;
-    public Transform[] kMonsterPurpleDiceArr2;
+    [Header("전투 화면")]
+    public UIBattleScene kBattleScene;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        kBattleButton.gameObject.SetActive(false);
+
+        SetPlayerPick(null);
+        SetMonsterPick(null);
+
+        kBattleScene.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -59,88 +49,96 @@ public class UIStageInfo : MonoBehaviour
 
     public void SetPlayer(Player _purplePlayer, Player _redPlayer, Player _greenPlayer)
     {
-        kPurpleDiceCnt.text = _purplePlayer.table.Dice.ToString();
-        kRedDiceCnt.text = _redPlayer.table.Dice.ToString();
-        kGreenDiceCnt.text = _greenPlayer.table.Dice.ToString();
+        kPurplePlayerSlotInfo.Set(_purplePlayer);
+        kRedPlayerSlotInfo.Set(_redPlayer);
+        kGreenPlayerSlotInfo.Set(_greenPlayer);
 
         kPlayerTotalHp.text = (_purplePlayer.table.Hp + _redPlayer.table.Hp + _greenPlayer.table.Hp).ToString();
-
-        Vector3 pos = Camera.main.WorldToScreenPoint(_purplePlayer.GetDiceTransform().position);
-        kPurpleDiceSlot.position = pos;
-
-        pos = Camera.main.WorldToScreenPoint(_redPlayer.GetDiceTransform().position);
-        kRedDiceSlot.position = pos;
-
-        pos = Camera.main.WorldToScreenPoint(_greenPlayer.GetDiceTransform().position);
-        kGreenDiceSlot.position = pos;
     }
 
     public void SetMonster(Monster _mon0, Monster _mon1, Monster _mon2)
     {
-        kMonsterName0.text = $"[{_mon0.table.Name}]";
-        Vector3 pos = Camera.main.WorldToScreenPoint(_mon0.GetNameTransform().position);
-        kMonsterName0.rectTransform.position = pos;
+        kMonsterSlotInfo0.Set(_mon0);
+        kMonsterSlotInfo1.Set(_mon1);
+        kMonsterSlotInfo2.Set(_mon2);
+    }
 
-        kMonsterName1.text = $"[{_mon1.table.Name}]";
-        pos = Camera.main.WorldToScreenPoint(_mon1.GetNameTransform().position);
-        kMonsterName1.rectTransform.position = pos;
+    Player mSelectPlayer = null;
+    Monster mSelectMonster = null;
 
-        kMonsterName2.text = $"[{_mon2.table.Name}]";
-        pos = Camera.main.WorldToScreenPoint(_mon2.GetNameTransform().position);
-        kMonsterName2.rectTransform.position = pos;
+    public void SetPlayerPick(Player _player)
+    {
+        kPurplePlayerSlotInfo.Pick(false);
+        kRedPlayerSlotInfo.Pick(false);
+        kGreenPlayerSlotInfo.Pick(false);
+        
+        mSelectPlayer = _player;
 
-        pos = Camera.main.WorldToScreenPoint(_mon0.GetInfoTransform().position);
-        kMonsterInfoSlot0.position = pos;
-        pos = Camera.main.WorldToScreenPoint(_mon1.GetInfoTransform().position);
-        kMonsterInfoSlot1.position = pos;
-        pos = Camera.main.WorldToScreenPoint(_mon2.GetInfoTransform().position);
-        kMonsterInfoSlot2.position = pos;
+        if (mSelectPlayer == null)
+            return;
 
-        kMonsterHp0.text = $"체력 {_mon0.table.Hp}";
-        kMonsterHp1.text = $"체력 {_mon1.table.Hp}";
-        kMonsterHp2.text = $"체력 {_mon2.table.Hp}";
-
-        kMonsterDicePivot0.text = _mon0.table.DicePivot.ToString();
-        kMonsterDicePivot1.text = _mon1.table.DicePivot.ToString();
-        kMonsterDicePivot2.text = _mon2.table.DicePivot.ToString();
-
-        for(int i = 0; i < kMonsterRedDiceArr0.Length; i++){
-            if( i < _mon0.table.RedDice )   kMonsterRedDiceArr0[i].gameObject.SetActive(true);
-            else                            kMonsterRedDiceArr0[i].gameObject.SetActive(false);
-        }
-        for (int i = 0; i < kMonsterGreenDiceArr0.Length; i++){
-            if (i < _mon0.table.RedDice)    kMonsterGreenDiceArr0[i].gameObject.SetActive(true);
-            else                            kMonsterGreenDiceArr0[i].gameObject.SetActive(false);
-        }
-        for (int i = 0; i < kMonsterPurpleDiceArr0.Length; i++){
-            if (i < _mon0.table.RedDice)    kMonsterPurpleDiceArr0[i].gameObject.SetActive(true);
-            else                            kMonsterPurpleDiceArr0[i].gameObject.SetActive(false);
+        switch (mSelectPlayer.kType)
+        {
+            case PlayerType.Purple:
+                kPurplePlayerSlotInfo.Pick(true);
+                break;
+            case PlayerType.Red:
+                kRedPlayerSlotInfo.Pick(true);
+                break;            
+            case PlayerType.Green:
+                kGreenPlayerSlotInfo.Pick(true);
+                break;
         }
 
-        for (int i = 0; i < kMonsterRedDiceArr1.Length; i++){
-            if (i < _mon1.table.RedDice)    kMonsterGreenDiceArr1[i].gameObject.SetActive(true);
-            else                            kMonsterGreenDiceArr1[i].gameObject.SetActive(false);
+        if(mSelectMonster != null)
+        {
+            kBattleButton.gameObject.SetActive(true);
         }
-        for (int i = 0; i < kMonsterGreenDiceArr1.Length; i++){
-            if (i < _mon1.table.RedDice)    kMonsterGreenDiceArr1[i].gameObject.SetActive(true);
-            else                            kMonsterGreenDiceArr1[i].gameObject.SetActive(false);
-        }
-        for (int i = 0; i < kMonsterPurpleDiceArr1.Length; i++){
-            if (i < _mon1.table.RedDice)    kMonsterPurpleDiceArr1[i].gameObject.SetActive(true);
-            else                            kMonsterPurpleDiceArr1[i].gameObject.SetActive(false);
+    }
+
+    public void SetMonsterPick(Monster _mon)
+    {
+        kMonsterSlotInfo0.Pick(false);
+        kMonsterSlotInfo1.Pick(false);
+        kMonsterSlotInfo2.Pick(false);
+
+        mSelectMonster = _mon;
+
+        if (mSelectMonster == null)
+            return;
+
+        switch (mSelectMonster.slotIndex)
+        {            
+            case 0:
+                kMonsterSlotInfo0.Pick(true);
+                break;
+            case 1:
+                kMonsterSlotInfo1.Pick(true);
+                break;
+            case 2:
+                kMonsterSlotInfo2.Pick(true);
+                break;
         }
 
-        for (int i = 0; i < kMonsterRedDiceArr2.Length; i++){
-            if (i < _mon2.table.RedDice)    kMonsterGreenDiceArr2[i].gameObject.SetActive(true);
-            else                            kMonsterGreenDiceArr2[i].gameObject.SetActive(false);
+        if (mSelectPlayer != null)
+        {
+            kBattleButton.gameObject.SetActive(true);
         }
-        for (int i = 0; i < kMonsterGreenDiceArr2.Length; i++){
-            if (i < _mon2.table.RedDice)    kMonsterGreenDiceArr2[i].gameObject.SetActive(true);
-            else                            kMonsterGreenDiceArr2[i].gameObject.SetActive(false);
-        }
-        for (int i = 0; i < kMonsterPurpleDiceArr2.Length; i++){
-            if (i < _mon2.table.RedDice)    kMonsterPurpleDiceArr2[i].gameObject.SetActive(true);
-            else                            kMonsterPurpleDiceArr2[i].gameObject.SetActive(false);
-        }
+    }
+
+    public void OnBattleButtonClick()
+    {
+        kPurplePlayerSlotInfo.gameObject.SetActive(false);
+        kRedPlayerSlotInfo.gameObject.SetActive(false);
+        kGreenPlayerSlotInfo.gameObject.SetActive(false);
+
+        kMonsterSlotInfo0.gameObject.SetActive(false);
+        kMonsterSlotInfo1.gameObject.SetActive(false);
+        kMonsterSlotInfo2.gameObject.SetActive(false);
+
+        kBattleScene.gameObject.SetActive(true);
+        kBattleScene.SetPlayer(mSelectPlayer);
+
+        Mng.play.kStage.SetBattle(mSelectPlayer, mSelectMonster);
     }
 }

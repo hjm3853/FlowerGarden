@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1189257172164216640}
   - component: {fileID: 6192290392719012416}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1770891497343609321}
   - component: {fileID: 3879554164984165714}
-  m_Layer: 0
+  - component: {fileID: 790450575658218050}
+  m_Layer: 6
   m_Name: Monster2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -133,6 +134,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   kNameTransform: {fileID: 5187745168572923571}
   kInfoTransform: {fileID: 2474803317580991071}
+--- !u!65 &790450575658218050
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5313063169411118063}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2, y: 4, z: 0.2}
+  m_Center: {x: 0, y: 2, z: 0}
 --- !u!1 &5527401143229291996
 GameObject:
   m_ObjectHideFlags: 0
@@ -142,7 +164,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5187745168572923571}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Name
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -173,7 +195,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2474803317580991071}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Infomation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
