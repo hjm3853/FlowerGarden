@@ -11,11 +11,14 @@ public class Player : MonoBehaviour
 
     public Transform kDiceTransform;
 
+    public long hp {  get; set; }
+
     PlayerTable_Client mTable;
     public PlayerTable_Client table
     {
         get { return mTable; }
         set { mTable = value;
+            hp = mTable.Hp;
             kType = (PlayerType)mTable.Type;
         }
     }

@@ -5,8 +5,10 @@ using UnityEngine;
 
 public class UIPlayerSlotInfo : MonoBehaviour
 {
-    [Header("플레이어 주사위 갯수")]
+    [Header("플레이어 토큰 포인트")]
     public TMP_Text kDiceCnt;
+    [Header("플레이어 이름")]
+    public TMP_Text kName;
 
     [Header("플레이어 선택")]
     public GameObject kPick;
@@ -25,7 +27,8 @@ public class UIPlayerSlotInfo : MonoBehaviour
 
     public void Set(Player _player)
     {
-        kDiceCnt.text = _player.table.Dice.ToString();
+        kDiceCnt.text = $"TP : {_player.table.TP}";
+        kName.text = _player.table.Name;
 
         Vector3 pos = Camera.main.WorldToScreenPoint(_player.GetDiceTransform().position);
         transform.position = pos;

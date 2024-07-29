@@ -35,8 +35,8 @@ namespace SheetData
 		public long Hp { get { return _Hp; } set{_Hp=value; } }
 
 		[SerializeField]
-		private int _Dice;
-		public int Dice { get { return _Dice; } set{_Dice=value; } }
+		private int _TP;
+		public int TP { get { return _TP; } set{_TP=value; } }
 
 		[SerializeField]
 		private long _Skill1;
@@ -66,7 +66,7 @@ namespace SheetData
 			TryParse(sheet[row][column++], out _Name);
 			TryParse(sheet[row][column++], out _Type);
 			TryParse(sheet[row][column++], out _Hp);
-			TryParse(sheet[row][column++], out _Dice);
+			TryParse(sheet[row][column++], out _TP);
 			TryParse(sheet[row][column++], out _Skill1);
 			TryParse(sheet[row][column++], out _Skill2);
 			TryParse(sheet[row][column++], out _Skill3);

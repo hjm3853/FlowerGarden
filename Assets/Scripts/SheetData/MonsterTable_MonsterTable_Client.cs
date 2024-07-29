@@ -31,20 +31,20 @@ namespace SheetData
 		public long Hp { get { return _Hp; } set{_Hp=value; } }
 
 		[SerializeField]
-		private int _DicePivot;
-		public int DicePivot { get { return _DicePivot; } set{_DicePivot=value; } }
+		private int _AP;
+		public int AP { get { return _AP; } set{_AP=value; } }
 
 		[SerializeField]
-		private int _RedDice;
-		public int RedDice { get { return _RedDice; } set{_RedDice=value; } }
+		private int _BlueToken;
+		public int BlueToken { get { return _BlueToken; } set{_BlueToken=value; } }
 
 		[SerializeField]
-		private long _GreenDice;
-		public long GreenDice { get { return _GreenDice; } set{_GreenDice=value; } }
+		private int _GreenToken;
+		public int GreenToken { get { return _GreenToken; } set{_GreenToken=value; } }
 
 		[SerializeField]
-		private long _PurpleDice;
-		public long PurpleDice { get { return _PurpleDice; } set{_PurpleDice=value; } }
+		private int _PurpleToken;
+		public int PurpleToken { get { return _PurpleToken; } set{_PurpleToken=value; } }
 
 		[SerializeField]
 		private string _Prefab;
@@ -61,10 +61,10 @@ namespace SheetData
 			TryParse(sheet[row][column++], out _UID);
 			TryParse(sheet[row][column++], out _Name);
 			TryParse(sheet[row][column++], out _Hp);
-			TryParse(sheet[row][column++], out _DicePivot);
-			TryParse(sheet[row][column++], out _RedDice);
-			TryParse(sheet[row][column++], out _GreenDice);
-			TryParse(sheet[row][column++], out _PurpleDice);
+			TryParse(sheet[row][column++], out _AP);
+			TryParse(sheet[row][column++], out _BlueToken);
+			TryParse(sheet[row][column++], out _GreenToken);
+			TryParse(sheet[row][column++], out _PurpleToken);
 			TryParse(sheet[row][column++], out _Prefab);
 		}
 #endif

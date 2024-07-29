@@ -7,22 +7,29 @@ using UnityEngine.UI;
 
 public class UIStageInfo : MonoBehaviour
 {
-    [Header("플레이어 총 체력")]
-    public TMP_Text kPlayerTotalHp;
-
     [Header("보라 플레이어 정보")]
     public UIPlayerSlotInfo kPurplePlayerSlotInfo;
-    [Header("빨강 플레이어 정보")]
-    public UIPlayerSlotInfo kRedPlayerSlotInfo;
+    [Header("파랑 플레이어 정보")]
+    public UIPlayerSlotInfo kBluePlayerSlotInfo;
     [Header("초록 플레이어 정보")]
     public UIPlayerSlotInfo kGreenPlayerSlotInfo;
+
+    [Header("보라 Hp")]
+    public UIPlayerHpbarInfo kPurplePlayerHpbar;
+    [Header("파랑 Hp")]
+    public UIPlayerHpbarInfo kBluePlayerHpbar;
+    [Header("초록 Hp")]
+    public UIPlayerHpbarInfo kGreenPlayerHpbar;
 
     [Header("1번 슬롯 몬스터 정보")]
     public UIMonsterSlotInfo kMonsterSlotInfo0;
     [Header("2번 슬롯 몬스터 정보")]
     public UIMonsterSlotInfo kMonsterSlotInfo1;
     [Header("3번 슬롯 몬스터 정보")]
-    public UIMonsterSlotInfo kMonsterSlotInfo2;    
+    public UIMonsterSlotInfo kMonsterSlotInfo2;
+
+    [Header("주사위 연출 화면")]
+    public RawImage kDiceScreenImage;
 
     [Header("전투 실행 버튼")]
     public Button kBattleButton;
@@ -34,6 +41,7 @@ public class UIStageInfo : MonoBehaviour
     void Start()
     {
         kBattleButton.gameObject.SetActive(false);
+        kDiceScreenImage.gameObject.SetActive(false);
 
         SetPlayerPick(null);
         SetMonsterPick(null);
@@ -47,13 +55,16 @@ public class UIStageInfo : MonoBehaviour
         
     }
 
-    public void SetPlayer(Player _purplePlayer, Player _redPlayer, Player _greenPlayer)
+    public void SetPlayer(Player _purplePlayer, Player _bluePlayer, Player _greenPlayer)
     {
         kPurplePlayerSlotInfo.Set(_purplePlayer);
-        kRedPlayerSlotInfo.Set(_redPlayer);
+        kBluePlayerSlotInfo.Set(_bluePlayer);
         kGreenPlayerSlotInfo.Set(_greenPlayer);
 
-        kPlayerTotalHp.text = (_purplePlayer.table.Hp + _redPlayer.table.Hp + _greenPlayer.table.Hp).ToString();
+        kPurplePlayerHpbar.Set(_purplePlayer);
+        kBluePlayerHpbar.Set(_bluePlayer);
+        kGreenPlayerHpbar.Set(_greenPlayer);
+
     }
 
     public void SetMonster(Monster _mon0, Monster _mon1, Monster _mon2)
@@ -69,7 +80,7 @@ public class UIStageInfo : MonoBehaviour
     public void SetPlayerPick(Player _player)
     {
         kPurplePlayerSlotInfo.Pick(false);
-        kRedPlayerSlotInfo.Pick(false);
+        kBluePlayerSlotInfo.Pick(false);
         kGreenPlayerSlotInfo.Pick(false);
         
         mSelectPlayer = _player;
@@ -82,8 +93,8 @@ public class UIStageInfo : MonoBehaviour
             case PlayerType.Purple:
                 kPurplePlayerSlotInfo.Pick(true);
                 break;
-            case PlayerType.Red:
-                kRedPlayerSlotInfo.Pick(true);
+            case PlayerType.Blue:
+                kBluePlayerSlotInfo.Pick(true);
                 break;            
             case PlayerType.Green:
                 kGreenPlayerSlotInfo.Pick(true);
@@ -129,7 +140,7 @@ public class UIStageInfo : MonoBehaviour
     public void OnBattleButtonClick()
     {
         kPurplePlayerSlotInfo.gameObject.SetActive(false);
-        kRedPlayerSlotInfo.gameObject.SetActive(false);
+        kBluePlayerSlotInfo.gameObject.SetActive(false);
         kGreenPlayerSlotInfo.gameObject.SetActive(false);
 
         kMonsterSlotInfo0.gameObject.SetActive(false);
@@ -137,8 +148,54 @@ public class UIStageInfo : MonoBehaviour
         kMonsterSlotInfo2.gameObject.SetActive(false);
 
         kBattleScene.gameObject.SetActive(true);
-        kBattleScene.SetPlayer(mSelectPlayer);
+        //kBattleScene.SetPlayer(mSelectPlayer);
+        kBattleButton.gameObject.SetActive(false);
 
-        Mng.play.kStage.SetBattle(mSelectPlayer, mSelectMonster);
+        kPurplePlayerHpbar.gameObject.SetActive(false);
+        kBluePlayerHpbar.gameObject.SetActive(false);
+        kGreenPlayerHpbar.gameObject.SetActive(false);
+
+        switch (mSelectMonster.slotIndex)
+        {
+            case 0:{
+                    kPurplePlayerHpbar.gameObject.SetActive(true);
+                    Vector3 pos = kPurplePlayerHpbar.rectTransform().localPosition;
+                    pos.x = 0;
+                    kPurplePlayerHpbar.rectTransform().localPosition = pos;
+                }break;
+            case 1:{
+                    kBluePlayerHpbar.gameObject.SetActive(true);
+                    Vector3 pos = kBluePlayerHpbar.rectTransform().localPosition;
+                    pos.x = 0;
+                    kBluePlayerHpbar.rectTransform().localPosition = pos;
+                }break;
+            case 2:{
+                    kGreenPlayerHpbar.gameObject.SetActive(true);
+                    Vector3 pos = kGreenPlayerHpbar.rectTransform().localPosition;
+                    pos.x = 0;
+                    kGreenPlayerHpbar.rectTransform().localPosition = pos;
+                }break;
+        }        
+
+        Mng.play.kStage.SetBattle(mSelectPlayer, mSelectMonster);        
+    }
+
+    public void MonsterInfoRefresh()
+    {
+        switch (mSelectMonster.slotIndex)
+        {
+            case 0:
+                kMonsterSlotInfo0.gameObject.SetActive(true);
+                kMonsterSlotInfo0.Set(mSelectMonster);
+                break;
+            case 1:
+                kMonsterSlotInfo1.gameObject.SetActive(true);
+                kMonsterSlotInfo1.Set(mSelectMonster);
+                break;
+            case 2:
+                kMonsterSlotInfo2.gameObject.SetActive(true);
+                kMonsterSlotInfo2.Set(mSelectMonster);
+                break;
+        }
     }
 }

@@ -34,16 +34,16 @@ public class UIBattleScene : MonoBehaviour
         switch (_player.kType){ 
             case EnumDef.PlayerType.Purple:{
 
-                    for (int i = 0; i < _player.table.Dice; i++)
+                    for (int i = 0; i < _player.table.TP; i++)
                     {
                         kPurpleDiceArr[i].SetActive(true);
                         var t = kPurpleDiceArr[i].GetComponentInChildren<TMP_Text>();
                         t.text = Random.Range(1, 7).ToString();
                     }
                 }break;
-            case EnumDef.PlayerType.Red:{
+            case EnumDef.PlayerType.Blue:{
                     
-                    for (int i = 0; i < _player.table.Dice; i++)
+                    for (int i = 0; i < _player.table.TP; i++)
                     {
                         kRedDiceArr[i].SetActive(true);
                         var t = kRedDiceArr[i].GetComponentInChildren<TMP_Text>();
@@ -53,7 +53,7 @@ public class UIBattleScene : MonoBehaviour
                 }break;
             case EnumDef.PlayerType.Green:{
 
-                    for (int i = 0; i < _player.table.Dice; i++)
+                    for (int i = 0; i < _player.table.TP; i++)
                     {
                         kGreenDiceArr[i].SetActive(true);
                         var t = kGreenDiceArr[i].GetComponentInChildren<TMP_Text>();

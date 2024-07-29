@@ -19,6 +19,8 @@ public class Stage : MonoBehaviour
     Transform mPlayerBattleTrans;
     Transform mMonsterBattleTrans;
 
+    public PlayerDiceBoard kPlayerDiceBoard;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -71,7 +73,7 @@ public class Stage : MonoBehaviour
         {
             switch (player.kType)
             {
-                case PlayerType.Red:
+                case PlayerType.Blue:
                     player.transform.parent = mRedSlot;
                     player.transform.localPosition = Vector3.zero;
                     break;
@@ -143,7 +145,7 @@ public class Stage : MonoBehaviour
             case PlayerType.Purple:
                 mPurpleSlot.gameObject.SetActive(true);
                 break;
-            case PlayerType.Red:
+            case PlayerType.Blue:
                 mRedSlot.gameObject.SetActive(true);
                 break;
             case PlayerType.Green:
@@ -166,5 +168,70 @@ public class Stage : MonoBehaviour
         
         _player.transform.position = mPlayerBattleTrans.position;
         _monster.transform.position = mMonsterBattleTrans.position;
+
+        StartCoroutine(OnBattlePrgress(_player, _monster));
+    }
+
+    List<int> mPlayerTpCollect = new List<int>();
+
+    IEnumerator OnBattlePrgress(Player _player, Monster _monster)
+    {
+        Mng.canvas.stageInfo.MonsterInfoRefresh();
+
+        yield return new WaitForSeconds(2f);
+
+        mPlayerTpCollect.Clear();
+
+        //플레이어 토큰 갯수만큼 주사위 굴린다.
+        //플레이어 토큰 중에 가장 큰 수의 순서대로 정렬
+        //몬스터 토큰 갯수만큼 빼내어서 합산
+        //결과값이 몬스터 AP 숫자보다 커야 공격 작으면 반격 당함
+
+        //kPlayerDiceBoard.Roll(_player.table.TP);
+
+        int monsterAp = 0;
+        switch((PlayerType)_player.table.Type)
+        {
+            case PlayerType.Blue:
+                monsterAp = _monster.table.BlueToken;
+                break;
+            case PlayerType.Purple:
+                monsterAp = _monster.table.PurpleToken;
+                break;
+            case PlayerType.Green:
+                monsterAp = _monster.table.GreenToken;
+                break;
+        }
+
+        int count = Mathf.Min(_player.table.TP, monsterAp);
+
+        for (int i = 0; i < count; i++)
+        {
+            mPlayerTpCollect.Add(Random.Range(1, 6+1));
+        }
+        
+        mPlayerTpCollect.Sort();
+
+
+        int totalDamage = 0;
+        switch((PlayerType)_player.table.Type)
+        {
+            case PlayerType.Purple:
+                for (int n = 0; n < _monster.table.PurpleToken; n++)
+                    totalDamage += mPlayerTpCollect[n];
+                break;
+            case PlayerType.Green:
+                for (int n = 0; n < _monster.table.GreenToken; n++)
+                    totalDamage += mPlayerTpCollect[n];
+                break;
+            case PlayerType.Blue:
+                for (int n = 0; n < _monster.table.BlueToken; n++)
+                    totalDamage += mPlayerTpCollect[n];
+                break;
+        }
+        
+
+        //if( totalDamage > _monster.table.AP)
+            
     }
 }

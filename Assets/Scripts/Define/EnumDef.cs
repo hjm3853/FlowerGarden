@@ -13,7 +13,7 @@ namespace EnumDef
     {
         None,
         Purple,
-        Red,
+        Blue,
         Green,
     }
 

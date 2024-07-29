@@ -48,7 +48,7 @@ public class PlayerDiceBoard : MonoBehaviour
     public int kTestCount = 5;
     
     [Button("¡÷ªÁ¿ß")]
-    public void Roll()
+    public void Roll(bool _isTest = true, List<int> _fixedDiceList = null)
     {
         mDiceIndexList.Clear();
 
@@ -58,7 +58,9 @@ public class PlayerDiceBoard : MonoBehaviour
             mDiceIndexList.Add(i);
         }
 
-        for (int i = 0; i < kTestCount; i++)
+        int count = _isTest ? kTestCount : _fixedDiceList.Count;
+
+        for (int i = 0; i < count; i++)
         {
             var select = Random.Range(0, mDiceIndexList.Count);
 
@@ -75,10 +77,15 @@ public class PlayerDiceBoard : MonoBehaviour
 
             var from = dice.transform.position;
             var to = dice.transform.position + dice.transform.forward * kDiceForwardDist;
-            
-            dice.Play(Random.Range(1, 6 + 1), from, to, kDiceDropHeight, kDiceAnimationTime);
+
+            if(_isTest == true)
+                dice.Play(Random.Range(1, 6+1), from, to, kDiceDropHeight, kDiceAnimationTime);
+            else
+                dice.Play(_fixedDiceList[i], from, to, kDiceDropHeight, kDiceAnimationTime);
 
             mDiceIndexList.Remove(index);
         }
+
+        Mng.canvas.stageInfo.kDiceScreenImage.gameObject.SetActive(true);
     }
 }
