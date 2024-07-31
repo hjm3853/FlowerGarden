@@ -6,10 +6,15 @@ using UnityEngine;
 public class Monster : MonoBehaviour
 {
     MonsterTable_Client mTable;
+
+    public long hp { get; set; }
+
     public MonsterTable_Client table
     {
         get { return mTable; }
-        set { mTable = value; }
+        set { mTable = value;
+            hp = mTable.Hp;
+        }
     }
 
     public Transform kNameTransform;

@@ -8,7 +8,7 @@ using UnityEngine.Device;
 public class Stage : MonoBehaviour
 {
     Transform mPurpleSlot;
-    Transform mRedSlot;
+    Transform mBlueSlot;
     Transform mGreenSlot;
 
     Transform mMonsterSlot0;
@@ -25,7 +25,7 @@ public class Stage : MonoBehaviour
     void Awake()
     {
         mPurpleSlot = transform.Find("Set/PurpleSlot");
-        mRedSlot = transform.Find("Set/RedSlot");
+        mBlueSlot = transform.Find("Set/BlueSlot");
         mGreenSlot = transform.Find("Set/GreenSlot");
 
         mMonsterSlot0 = transform.Find("Set/EnemySlot0");
@@ -74,7 +74,7 @@ public class Stage : MonoBehaviour
             switch (player.kType)
             {
                 case PlayerType.Blue:
-                    player.transform.parent = mRedSlot;
+                    player.transform.parent = mBlueSlot;
                     player.transform.localPosition = Vector3.zero;
                     break;
                 case PlayerType.Purple:
@@ -112,7 +112,7 @@ public class Stage : MonoBehaviour
     public void SetBase()
     {
         mPurpleSlot.gameObject.SetActive(true);
-        mRedSlot.gameObject.SetActive(true);
+        mBlueSlot.gameObject.SetActive(true);
         mGreenSlot.gameObject.SetActive(true);
 
         mMonsterSlot0.gameObject.SetActive(true);
@@ -131,7 +131,7 @@ public class Stage : MonoBehaviour
     public void SetBattle(Player _player, Monster _monster)
     {
         mPurpleSlot.gameObject.SetActive(false);        
-        mRedSlot.gameObject.SetActive(false);
+        mBlueSlot.gameObject.SetActive(false);
         mGreenSlot.gameObject.SetActive(false);
 
         mMonsterSlot0.gameObject.SetActive(false);
@@ -146,7 +146,7 @@ public class Stage : MonoBehaviour
                 mPurpleSlot.gameObject.SetActive(true);
                 break;
             case PlayerType.Blue:
-                mRedSlot.gameObject.SetActive(true);
+                mBlueSlot.gameObject.SetActive(true);
                 break;
             case PlayerType.Green:
                 mGreenSlot.gameObject.SetActive(true);
@@ -176,62 +176,118 @@ public class Stage : MonoBehaviour
 
     IEnumerator OnBattlePrgress(Player _player, Monster _monster)
     {
-        Mng.canvas.stageInfo.MonsterInfoRefresh();
+        Mng.canvas.stageInfo.SelectMonsterRefresh();
 
         yield return new WaitForSeconds(2f);
 
         mPlayerTpCollect.Clear();
 
         //플레이어 토큰 갯수만큼 주사위 굴린다.
-        //플레이어 토큰 중에 가장 큰 수의 순서대로 정렬
-        //몬스터 토큰 갯수만큼 빼내어서 합산
-        //결과값이 몬스터 AP 숫자보다 커야 공격 작으면 반격 당함
-
-        //kPlayerDiceBoard.Roll(_player.table.TP);
-
-        int monsterAp = 0;
-        switch((PlayerType)_player.table.Type)
-        {
-            case PlayerType.Blue:
-                monsterAp = _monster.table.BlueToken;
-                break;
-            case PlayerType.Purple:
-                monsterAp = _monster.table.PurpleToken;
-                break;
-            case PlayerType.Green:
-                monsterAp = _monster.table.GreenToken;
-                break;
-        }
-
-        int count = Mathf.Min(_player.table.TP, monsterAp);
-
+        int count = _player.table.TP;
         for (int i = 0; i < count; i++)
         {
-            mPlayerTpCollect.Add(Random.Range(1, 6+1));
+            mPlayerTpCollect.Add(Random.Range(1, 6 + 1));
         }
-        
-        mPlayerTpCollect.Sort();
 
+        kPlayerDiceBoard.Roll(false, mPlayerTpCollect);
 
-        int totalDamage = 0;
-        switch((PlayerType)_player.table.Type)
+        //플레이어 토큰 중에 가장 큰 수의 순서대로 정렬
+        mPlayerTpCollect.Sort((int a, int b) => b.CompareTo(a));
+
+        //몬스터에게서 플레이어 타입 토큰 갯수(AP)만큼 빼내어서 합산
+        int monToken = 0;
+        switch ((PlayerType)_player.table.Type)
         {
+            case PlayerType.Blue:
+                monToken = _monster.table.BlueToken;
+                break;
             case PlayerType.Purple:
-                for (int n = 0; n < _monster.table.PurpleToken; n++)
-                    totalDamage += mPlayerTpCollect[n];
+                monToken = _monster.table.PurpleToken;
                 break;
             case PlayerType.Green:
-                for (int n = 0; n < _monster.table.GreenToken; n++)
-                    totalDamage += mPlayerTpCollect[n];
-                break;
-            case PlayerType.Blue:
-                for (int n = 0; n < _monster.table.BlueToken; n++)
-                    totalDamage += mPlayerTpCollect[n];
+                monToken = _monster.table.GreenToken;
                 break;
         }
-        
 
-        //if( totalDamage > _monster.table.AP)
-            
+        int minToken = Mathf.Min(_player.table.TP, monToken);
+        int sumAttack = 0;
+        for(int i = 0; i < minToken; i++)
+        {
+            sumAttack += mPlayerTpCollect[i];
+        }
+
+        yield return new WaitForSeconds(1.5f);
+
+        //결과값이 몬스터 AP 숫자보다 커야 공격 작으면 반격
+        if (sumAttack > _monster.table.AP) {
+            int damage = sumAttack - _monster.table.AP;
+            Debug.Log($"플레이어 토큰 합 {sumAttack} 몬스터 AP {_monster.table.AP} : 공격 {damage}");
+            Mng.canvas.battleScene.SetMonsterDamage(damage);
+            _monster.hp -= damage;
+            Mng.canvas.stageInfo.SelectMonsterRefresh();
+        }
+        else if (sumAttack < _monster.table.AP)
+        {
+            int damage = _monster.table.AP - sumAttack;
+            Debug.Log($"플레이어 토큰 합 {sumAttack} 몬스터 AP {_monster.table.AP} : 반격 {sumAttack - _monster.table.AP}");
+            Mng.canvas.battleScene.SetPlayerDamage(damage);
+            _player.hp -= damage;
+            Mng.canvas.stageInfo.SelectPlayerRefresh();
+        }
+        else
+        {
+            Debug.Log($"플레이어 토큰 합 {sumAttack} 몬스터 AP {_monster.table.AP} : 공격 무효");
+        }
+
+        yield return new WaitForSeconds(2f);
+
+        switch((PlayerType)_player.table.Type)
+        {
+            case PlayerType.Blue:
+                _player.transform.parent = mBlueSlot;
+                _player.transform.localPosition = Vector3.zero;
+                break;
+            case PlayerType.Purple:
+                _player.transform.parent = mPurpleSlot;
+                _player.transform.localPosition = Vector3.zero;
+                break;
+            case PlayerType.Green:
+                _player.transform.parent = mGreenSlot;
+                _player.transform.localPosition = Vector3.zero;
+                break;
+        }
+
+        switch (_monster.slotIndex)
+        {
+            case 0: _monster.transform.parent = mMonsterSlot0; break;
+            case 1: _monster.transform.parent = mMonsterSlot1; break;
+            case 2: _monster.transform.parent = mMonsterSlot2; break;
+        }
+
+        _monster.transform.localPosition = Vector3.zero;
+
+        mPurpleSlot.gameObject.SetActive(true);
+        mBlueSlot.gameObject.SetActive(true);
+        mGreenSlot.gameObject.SetActive(true);
+
+        mMonsterSlot0.gameObject.SetActive(true);
+        mMonsterSlot1.gameObject.SetActive(true);
+        mMonsterSlot2.gameObject.SetActive(true);
+
+        mBattleTrans.gameObject.SetActive(false);
+
+        Mng.canvas.stageInfo.BattleEnd();
+        Mng.canvas.battleScene.gameObject.SetActive(false);
+
+        //캐릭터 사망 여부 판단
+        if(_monster.hp <= 0)
+        {
+            _monster.gameObject.SetActive(false);
+        }
+
+        if (_player.hp <= 0)
+        {
+            _player.gameObject.SetActive(false);
+        }
     }
 }

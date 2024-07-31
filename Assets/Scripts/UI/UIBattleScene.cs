@@ -5,10 +5,12 @@ using UnityEngine;
 
 public class UIBattleScene : MonoBehaviour
 {
-    [Header("플레이어 주사위 슬롯")]
-    public GameObject[] kRedDiceArr;
-    public GameObject[] kGreenDiceArr;
-    public GameObject[] kPurpleDiceArr;
+    [Header("플레이어 피해량")]
+    public TMP_Text kPlayerDamageTxt;
+    [Header("몬스터 피해량")]
+    public TMP_Text kMonsterDamageTxt;
+    [Header("라운드")]
+    public TMP_Text kRoundTxt;
 
     // Start is called before the first frame update
     void Start()
@@ -22,44 +24,26 @@ public class UIBattleScene : MonoBehaviour
         
     }
 
-    public void SetPlayer(Player _player)
+    private void OnEnable()
     {
-        foreach (var p in kRedDiceArr)
-            p.SetActive(false);
-        foreach (var p in kGreenDiceArr)
-            p.SetActive(false);
-        foreach (var p in kPurpleDiceArr)
-            p.SetActive(false);
+        kMonsterDamageTxt.text = "";
+        kPlayerDamageTxt.text = "";
+    }
 
-        switch (_player.kType){ 
-            case EnumDef.PlayerType.Purple:{
+    public void SetPlayerDamage(int _damage)
+    {
+        kMonsterDamageTxt.text = "";
+        kPlayerDamageTxt.text = $"-{_damage.ToString()}";
+    }
 
-                    for (int i = 0; i < _player.table.TP; i++)
-                    {
-                        kPurpleDiceArr[i].SetActive(true);
-                        var t = kPurpleDiceArr[i].GetComponentInChildren<TMP_Text>();
-                        t.text = Random.Range(1, 7).ToString();
-                    }
-                }break;
-            case EnumDef.PlayerType.Blue:{
-                    
-                    for (int i = 0; i < _player.table.TP; i++)
-                    {
-                        kRedDiceArr[i].SetActive(true);
-                        var t = kRedDiceArr[i].GetComponentInChildren<TMP_Text>();
-                        t.text = Random.Range(1, 7).ToString();
-                    }
-                    
-                }break;
-            case EnumDef.PlayerType.Green:{
+    public void SetMonsterDamage(int _damage)
+    {
+        kPlayerDamageTxt.text = "";
+        kMonsterDamageTxt.text = $"-{_damage.ToString()}";
+    }
 
-                    for (int i = 0; i < _player.table.TP; i++)
-                    {
-                        kGreenDiceArr[i].SetActive(true);
-                        var t = kGreenDiceArr[i].GetComponentInChildren<TMP_Text>();
-                        t.text = Random.Range(1, 7).ToString();
-                    }
-                }break;
-        }
+    public void SetRound(int _count)
+    {
+        kRoundTxt.text = _count.ToString();
     }
 }

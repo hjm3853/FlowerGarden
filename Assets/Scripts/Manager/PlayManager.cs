@@ -49,6 +49,7 @@ public class PlayManager : MonoBehaviour
             GameObject go = Resources.Load(table.Prefab) as GameObject;
             player0 = Instantiate(go).GetComponent<Player>();
             player0.table = table;
+            playerList[0] = player0;
         }
 
         if (_redUID != 0)
@@ -57,6 +58,7 @@ public class PlayManager : MonoBehaviour
             GameObject go = Resources.Load(table.Prefab) as GameObject;
             player1 = Instantiate(go).GetComponent<Player>();
             player1.table = table;
+            playerList[1] = player1;
         }
 
         if (_greenUID != 0)
@@ -65,6 +67,7 @@ public class PlayManager : MonoBehaviour
             GameObject go = Resources.Load(table.Prefab) as GameObject;
             player2 = Instantiate(go).GetComponent<Player>();
             player2.table = table;
+            playerList[2] = player2;
         }
 
         kStage.SetPlayer(player0, player1, player2);

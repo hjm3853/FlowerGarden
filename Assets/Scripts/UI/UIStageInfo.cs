@@ -37,6 +37,9 @@ public class UIStageInfo : MonoBehaviour
     [Header("전투 화면")]
     public UIBattleScene kBattleScene;
 
+    Player mSelectPlayer = null;
+    Monster mSelectMonster = null;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -72,10 +75,7 @@ public class UIStageInfo : MonoBehaviour
         kMonsterSlotInfo0.Set(_mon0);
         kMonsterSlotInfo1.Set(_mon1);
         kMonsterSlotInfo2.Set(_mon2);
-    }
-
-    Player mSelectPlayer = null;
-    Monster mSelectMonster = null;
+    }    
 
     public void SetPlayerPick(Player _player)
     {
@@ -104,6 +104,21 @@ public class UIStageInfo : MonoBehaviour
         if(mSelectMonster != null)
         {
             kBattleButton.gameObject.SetActive(true);
+        }
+    }
+    public void SelectPlayerRefresh()
+    {
+        switch (mSelectPlayer.kType)
+        {
+            case PlayerType.Purple:
+                kPurplePlayerSlotInfo.Set(mSelectPlayer);
+                break;
+            case PlayerType.Blue:
+                kBluePlayerSlotInfo.Set(mSelectPlayer);
+                break;
+            case PlayerType.Green:
+                kGreenPlayerSlotInfo.Set(mSelectPlayer);
+                break;
         }
     }
 
@@ -155,21 +170,21 @@ public class UIStageInfo : MonoBehaviour
         kBluePlayerHpbar.gameObject.SetActive(false);
         kGreenPlayerHpbar.gameObject.SetActive(false);
 
-        switch (mSelectMonster.slotIndex)
+        switch (mSelectPlayer.kType)
         {
-            case 0:{
+            case PlayerType.Purple:{
                     kPurplePlayerHpbar.gameObject.SetActive(true);
                     Vector3 pos = kPurplePlayerHpbar.rectTransform().localPosition;
                     pos.x = 0;
                     kPurplePlayerHpbar.rectTransform().localPosition = pos;
                 }break;
-            case 1:{
+            case PlayerType.Blue:{
                     kBluePlayerHpbar.gameObject.SetActive(true);
                     Vector3 pos = kBluePlayerHpbar.rectTransform().localPosition;
                     pos.x = 0;
                     kBluePlayerHpbar.rectTransform().localPosition = pos;
                 }break;
-            case 2:{
+            case PlayerType.Green:{
                     kGreenPlayerHpbar.gameObject.SetActive(true);
                     Vector3 pos = kGreenPlayerHpbar.rectTransform().localPosition;
                     pos.x = 0;
@@ -180,7 +195,7 @@ public class UIStageInfo : MonoBehaviour
         Mng.play.kStage.SetBattle(mSelectPlayer, mSelectMonster);        
     }
 
-    public void MonsterInfoRefresh()
+    public void SelectMonsterRefresh()
     {
         switch (mSelectMonster.slotIndex)
         {
@@ -196,6 +211,109 @@ public class UIStageInfo : MonoBehaviour
                 kMonsterSlotInfo2.gameObject.SetActive(true);
                 kMonsterSlotInfo2.Set(mSelectMonster);
                 break;
+        }
+    }
+
+    public void BattleEnd()
+    {
+        kPurplePlayerSlotInfo.gameObject.SetActive(true);
+        kBluePlayerSlotInfo.gameObject.SetActive(true);
+        kGreenPlayerSlotInfo.gameObject.SetActive(true);
+
+        kPurplePlayerSlotInfo.Pick(false);
+        kBluePlayerSlotInfo.Pick(false);
+        kGreenPlayerSlotInfo.Pick(false);
+
+        kPurplePlayerHpbar.gameObject.SetActive(true);
+        kBluePlayerHpbar.gameObject.SetActive(true);
+        kGreenPlayerHpbar.gameObject.SetActive(true);
+
+        switch (mSelectPlayer.kType)
+        {
+            case PlayerType.Purple:
+                {                   
+                    Vector3 pos = kPurplePlayerHpbar.rectTransform().localPosition;
+                    pos.x = 280f;
+                    kPurplePlayerHpbar.rectTransform().localPosition = pos;
+                }
+                break;
+            case PlayerType.Blue:
+                {
+                    Vector3 pos = kBluePlayerHpbar.rectTransform().localPosition;
+                    pos.x = 0;
+                    kBluePlayerHpbar.rectTransform().localPosition = pos;
+                }
+                break;
+            case PlayerType.Green:
+                {
+                    Vector3 pos = kGreenPlayerHpbar.rectTransform().localPosition;
+                    pos.x = -280;
+                    kGreenPlayerHpbar.rectTransform().localPosition = pos;
+                }
+                break;
+        }
+
+        for (int i = 0; i < Mng.play.playerList.Length; i++)
+        {
+            var player = Mng.play.playerList[i];
+            if (player.hp <= 0)
+            {
+                switch (mSelectPlayer.kType)
+                {
+                    case PlayerType.Purple:
+                        {
+                            kPurplePlayerSlotInfo.gameObject.SetActive(false);
+                            kPurplePlayerHpbar.gameObject.SetActive(false);
+                        }
+                        break;
+                    case PlayerType.Blue:
+                        {
+                            kBluePlayerSlotInfo.gameObject.SetActive(false);
+                            kBluePlayerHpbar.gameObject.SetActive(false);
+                        }
+                        break;
+                    case PlayerType.Green:
+                        {
+                            kGreenPlayerSlotInfo.gameObject.SetActive(false);
+                            kGreenPlayerHpbar.gameObject.SetActive(false);
+                        }
+                        break;
+                }
+            }
+        }
+        
+        kMonsterSlotInfo0.gameObject.SetActive(true);
+        kMonsterSlotInfo1.gameObject.SetActive(true);
+        kMonsterSlotInfo2.gameObject.SetActive(true);
+        
+        kMonsterSlotInfo0.Pick(false);
+        kMonsterSlotInfo1.Pick(false);
+        kMonsterSlotInfo2.Pick(false);
+
+        switch(mSelectMonster.slotIndex)
+        {
+            case 0:
+                kMonsterSlotInfo0.Set(mSelectMonster); break;
+            case 1:
+                kMonsterSlotInfo1.Set(mSelectMonster); break;
+            case 2:
+                kMonsterSlotInfo2.Set(mSelectMonster); break;
+        }
+
+        kDiceScreenImage.gameObject.SetActive(false);
+
+        for(int i = 0; i < Mng.play.monsterList.Length; i++)
+        {
+            var mon = Mng.play.monsterList[i];
+            if(mon.hp <= 0)
+            {
+                switch (mon.slotIndex)
+                {
+                    case 0: kMonsterSlotInfo0.gameObject.SetActive(false); break;
+                    case 1: kMonsterSlotInfo1.gameObject.SetActive(false); break;
+                    case 2: kMonsterSlotInfo2.gameObject.SetActive(false); break;
+                }
+            }            
         }
     }
 }

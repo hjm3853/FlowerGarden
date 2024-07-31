@@ -7,12 +7,14 @@ public class MainCanvas : MonoBehaviour
     static public MainCanvas instance = null;
 
     public UIStageInfo stageInfo = null;
+    public UIBattleScene battleScene = null;
 
     private void Awake()
     {
         instance = this;
 
         stageInfo = this.GetComponentInChildren<UIStageInfo>(true);
+        battleScene = this.GetComponentInChildren<UIBattleScene>(true);
     }
 
     // Start is called before the first frame update
